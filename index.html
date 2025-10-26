@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baum-Quiz für Grundschüler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2d8659;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-buttons {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .answer-btn {
+            background: linear-gradient(135deg, #87ceeb 0%, #b0e0e6 100%);
+            border: 3px solid #4682b4;
+            border-radius: 20px;
+            padding: 20px;
+            font-size: 1.2em;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .answer-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #4682b4 0%, #5f9ea0 100%);
+            color: white;
+        }
+
+        .answer-btn:active {
+            transform: translateY(0);
+        }
+
+        .answer-btn.correct {
+            background: #90ee90 !important;
+            border-color: #228b22 !important;
+            color: #006400 !important;
+        }
+
+        .answer-btn.incorrect {
+            background: #ffcccc !important;
+            border-color: #cc0000 !important;
+            color: #8b0000 !important;
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .progress {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .result-screen {
+            display: none;
+        }
+
+        .result-screen.active {
+            display: block;
+        }
+
+        .result-message {
+            font-size: 1.8em;
+            color: #2d8659;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 15px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: 3px solid #ffa500;
+            border-radius: 25px;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            color: #8b4513;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 165, 0, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .question {
+                font-size: 1.2em;
+            }
+
+            .answer-btn {
+                font-size: 1em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>🌳 Baum-Quiz 🌳</h1>
+        
+        <div id="quiz-screen">
+            <div class="question" id="question"></div>
+            <div class="answer-buttons" id="answer-buttons"></div>
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="result-screen" id="result-screen">
+            <div class="result-message" id="result-message"></div>
+            <button class="restart-btn" id="restart-btn">🔄 Nochmal spielen!</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Ich habe Eicheln mit einem kleinen Hütchen. Welcher Baum bin ich?",
+                answers: ["Buche", "Eiche", "Tanne", "Kiefer"],
+                correct: 1
+            },
+            {
+                question: "Meine Zapfen stehen aufrecht wie Kerzen auf dem Ast. Welcher Baum bin ich?",
+                answers: ["Fichte", "Kiefer", "Tanne", "Buche"],
+                correct: 2
+            },
+            {
+                question: "Meine Nadeln sind weich und stechen nicht. Welcher Baum bin ich?",
+                answers: ["Tanne", "Fichte", "Kiefer", "Eiche"],
+                correct: 0
+            },
+            {
+                question: "Meine Nadeln wachsen immer zu zweit (als Paar) aus dem Ast. Welcher Baum bin ich?",
+                answers: ["Buche", "Fichte", "Kiefer", "Tanne"],
+                correct: 2
+            },
+            {
+                question: "Du erkennst mich an meiner glatten, silbergrauen Rinde. Welcher Baum bin ich?",
+                answers: ["Eiche", "Kiefer", "Fichte", "Buche"],
+                correct: 3
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answerSelected = false;
+
+        function showQuestion() {
+            const questionData = questions[currentQuestion];
+            document.getElementById('question').textContent = questionData.question;
+            
+            const answerButtons = document.getElementById('answer-buttons');
+            answerButtons.innerHTML = '';
+            
+            questionData.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.classList.add('answer-btn');
+                button.textContent = `${String.fromCharCode(65 + index)}) ${answer}`;
+                button.addEventListener('click', () => selectAnswer(index));
+                answerButtons.appendChild(button);
+            });
+            
+            answerSelected = false;
+            document.getElementById('progress').textContent = `Frage ${currentQuestion + 1} von ${questions.length}`;
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (answerSelected) return;
+            answerSelected = true;
+            
+            const questionData = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.answer-btn');
+            
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                
+                if (index === selectedIndex) {
+                    if (selectedIndex === questionData.correct) {
+                        button.classList.add('correct');
+                        score++;
+                    } else {
+                        button.classList.add('incorrect');
+                    }
+                }
+                
+                if (index === questionData.correct) {
+                    button.classList.add('correct');
+                }
+            });
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').classList.add('active');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            let message = `Super! Du hast ${score} von ${questions.length} Fragen richtig beantwortet!`;
+            
+            if (percentage === 100) {
+                message = `🎉 Perfekt! Du hast alle ${questions.length} Fragen richtig beantwortet! 🎉`;
+            } else if (percentage >= 80) {
+                message = `Sehr gut! Du hast ${score} von ${questions.length} Fragen richtig! 🏆`;
+            } else if (percentage >= 60) {
+                message = `Gut gemacht! Du hast ${score} von ${questions.length} Fragen richtig! 👍`;
+            }
+            
+            document.getElementById('result-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answerSelected = false;
+            
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('result-screen').classList.remove('active');
+            
+            showQuestion();
+        }
+
+        document.getElementById('restart-btn').addEventListener('click', restartQuiz);
+
+        showQuestion();
+    </script>
+</body>
+</html>
