@@ -488,9 +488,23 @@
         let score = 0;
         let answerSelected = false;
         let answerHistory = [];
+        let shuffledQuestions = [];
+        
+        // Shuffle questions function (Fisher-Yates algorithm)
+        function shuffleQuestions(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        // Shuffle questions on page load
+        shuffledQuestions = shuffleQuestions(questions);
 
         function showQuestion() {
-            const questionData = questions[currentQuestion];
+            const questionData = shuffledQuestions[currentQuestion];
             document.getElementById('question').textContent = questionData.question;
             
             const imageContainer = document.getElementById('question-image-container');
@@ -517,14 +531,14 @@
             });
             
             answerSelected = false;
-            document.getElementById('progress').textContent = `Frage ${currentQuestion + 1} von ${questions.length}`;
+            document.getElementById('progress').textContent = `Frage ${currentQuestion + 1} von ${shuffledQuestions.length}`;
         }
 
         function selectAnswer(selectedIndex) {
             if (answerSelected) return;
             answerSelected = true;
             
-            const questionData = questions[currentQuestion];
+            const questionData = shuffledQuestions[currentQuestion];
             const buttons = document.querySelectorAll('.answer-btn');
             
             const isCorrect = selectedIndex === questionData.correct;
@@ -559,7 +573,7 @@
             
             setTimeout(() => {
                 currentQuestion++;
-                if (currentQuestion < questions.length) {
+                if (currentQuestion < shuffledQuestions.length) {
                     showQuestion();
                 } else {
                     showResult();
@@ -571,15 +585,15 @@
             document.getElementById('quiz-screen').style.display = 'none';
             document.getElementById('result-screen').classList.add('active');
             
-            const percentage = Math.round((score / questions.length) * 100);
-            let message = `Super! Du hast ${score} von ${questions.length} Fragen richtig beantwortet!`;
+            const percentage = Math.round((score / shuffledQuestions.length) * 100);
+            let message = `Super! Du hast ${score} von ${shuffledQuestions.length} Fragen richtig beantwortet!`;
             
             if (percentage === 100) {
-                message = `🎉 Perfekt! Du hast alle ${questions.length} Fragen richtig beantwortet! 🎉`;
+                message = `🎉 Perfekt! Du hast alle ${shuffledQuestions.length} Fragen richtig beantwortet! 🎉`;
             } else if (percentage >= 80) {
-                message = `Sehr gut! Du hast ${score} von ${questions.length} Fragen richtig! 🏆`;
+                message = `Sehr gut! Du hast ${score} von ${shuffledQuestions.length} Fragen richtig! 🏆`;
             } else if (percentage >= 60) {
-                message = `Gut gemacht! Du hast ${score} von ${questions.length} Fragen richtig! 👍`;
+                message = `Gut gemacht! Du hast ${score} von ${shuffledQuestions.length} Fragen richtig! 👍`;
             }
             
             document.getElementById('result-message').textContent = message;
@@ -677,6 +691,9 @@
             score = 0;
             answerSelected = false;
             answerHistory = [];
+            
+            // Re-shuffle questions for a new random order
+            shuffledQuestions = shuffleQuestions(questions);
             
             document.getElementById('quiz-screen').style.display = 'block';
             document.getElementById('result-screen').classList.remove('active');
