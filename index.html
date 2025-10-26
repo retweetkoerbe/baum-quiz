@@ -26,7 +26,7 @@
             border-radius: 30px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             padding: 40px;
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
             text-align: center;
         }
@@ -41,12 +41,19 @@
         .question {
             font-size: 1.5em;
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             line-height: 1.6;
-            min-height: 80px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .question-image {
+            max-width: 100%;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .answer-buttons {
@@ -136,6 +143,107 @@
             box-shadow: 0 5px 20px rgba(255, 165, 0, 0.4);
         }
 
+        .detailed-summary {
+            margin-top: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .summary-title {
+            font-size: 1.3em;
+            color: #2d8659;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .question-item {
+            background: #f9f9f9;
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #ccc;
+            text-align: left;
+        }
+
+        .question-item.correct {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+
+        .question-item.incorrect {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .status-icon {
+            font-size: 1.2em;
+        }
+
+        .question-text {
+            margin: 8px 0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .answer-comparison {
+            margin-top: 8px;
+            font-size: 0.95em;
+        }
+
+        .user-answer {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .correct-answer {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #ffa500;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .recommendations h3 {
+            color: #d68910;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .recommendations ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .recommendations li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .recommendations li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.8em;
@@ -158,12 +266,14 @@
         
         <div id="quiz-screen">
             <div class="question" id="question"></div>
+            <div id="question-image-container"></div>
             <div class="answer-buttons" id="answer-buttons"></div>
             <div class="progress" id="progress"></div>
         </div>
 
         <div class="result-screen" id="result-screen">
             <div class="result-message" id="result-message"></div>
+            <div class="detailed-summary" id="detailed-summary"></div>
             <button class="restart-btn" id="restart-btn">🔄 Nochmal spielen!</button>
         </div>
     </div>
@@ -172,38 +282,228 @@
         const questions = [
             {
                 question: "Ich habe Eicheln mit einem kleinen Hütchen. Welcher Baum bin ich?",
+                image: null,
                 answers: ["Buche", "Eiche", "Tanne", "Kiefer"],
                 correct: 1
             },
             {
+                question: "Welcher Baum ist auf diesem Bild zu sehen?",
+                image: "img/eiche_600_435.jpg",
+                answers: ["Buche", "Eiche", "Tanne", "Kiefer"],
+                correct: 1,
+                description: "Ein Baum mit gelappten Blättern und Eicheln mit Hütchen"
+            },
+            {
                 question: "Meine Zapfen stehen aufrecht wie Kerzen auf dem Ast. Welcher Baum bin ich?",
+                image: null,
                 answers: ["Fichte", "Kiefer", "Tanne", "Buche"],
                 correct: 2
             },
             {
                 question: "Meine Nadeln sind weich und stechen nicht. Welcher Baum bin ich?",
+                image: null,
                 answers: ["Tanne", "Fichte", "Kiefer", "Eiche"],
                 correct: 0
             },
             {
+                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen? (Seine Nadeln wachsen paarweise)",
+                image: "img/kiefer_600_435.jpg",
+                answers: ["Fichte", "Kiefer", "Tanne", "Buche"],
+                correct: 1,
+                description: "Ein Nadelbaum mit langen Nadeln, die zu zweit wachsen"
+            },
+            {
                 question: "Meine Nadeln wachsen immer zu zweit (als Paar) aus dem Ast. Welcher Baum bin ich?",
+                image: null,
                 answers: ["Buche", "Fichte", "Kiefer", "Tanne"],
                 correct: 2
             },
             {
+                question: "Welcher Baum ist hier abgebildet? (Seine Zapfen hängen nach unten)",
+                image: "img/fichte_600_435.jpg",
+                answers: ["Tanne", "Fichte", "Kiefer", "Eiche"],
+                correct: 1,
+                description: "Ein Nadelbaum mit spitzen Nadeln und nach unten hängenden Zapfen"
+            },
+            {
                 question: "Du erkennst mich an meiner glatten, silbergrauen Rinde. Welcher Baum bin ich?",
+                image: null,
                 answers: ["Eiche", "Kiefer", "Fichte", "Buche"],
                 correct: 3
+            },
+            {
+                question: "Welcher Baum ist auf diesem Bild zu sehen? (Glatte Rinde und Bucheckern)",
+                image: "img/buche_600_435.jpg",
+                answers: ["Eiche", "Buche", "Fichte", "Kiefer"],
+                correct: 1,
+                description: "Ein Baum mit glatter Rinde und stacheligen Früchten"
+            },
+            // Eiche - Tree Identification
+            {
+                question: "Welcher Baum ist auf diesem Bild zu sehen?",
+                image: "img/eiche_600_435.jpg",
+                answers: ["Eiche", "Buche", "Fichte", "Tanne"],
+                correct: 0,
+                description: "Ein Baum mit gelappten Blättern"
+            },
+            // Eiche - Fruit Identification
+            {
+                question: "Was für Früchte trägt dieser Baum? (Hinweis: Sie haben ein kleines Hütchen)",
+                image: "img/eiche_600_435.jpg",
+                answers: ["Bucheckern", "Eicheln", "Zapfen", "Beeren"],
+                correct: 1,
+                description: "Dieser Baum trägt Eicheln mit Hütchen"
+            },
+            // Eiche - Leaf Identification
+            {
+                question: "Wie sehen die Blätter dieses Baums aus?",
+                image: "img/eiche_600_435.jpg",
+                answers: ["Glatt und oval", "Gelappt (mit Einbuchtungen)", "Nadel-förmig", "Gezahnt"],
+                correct: 1,
+                description: "Die Blätter sind gelappt mit Einbuchtungen"
+            },
+            // Buche - Tree Identification
+            {
+                question: "Welcher Baum ist auf diesem Bild zu sehen?",
+                image: "img/buche_600_435.jpg",
+                answers: ["Eiche", "Buche", "Kiefer", "Fichte"],
+                correct: 1,
+                description: "Ein Baum mit glatter silber-grauer Rinde"
+            },
+            // Buche - Fruit Identification
+            {
+                question: "Was für Früchte trägt dieser Baum?",
+                image: "img/buche_600_435.jpg",
+                answers: ["Eicheln", "Bucheckern (stachelige Hülle)", "Zapfen", "Beeren"],
+                correct: 1,
+                description: "Dieser Baum trägt Bucheckern in stacheligen Hüllen"
+            },
+            // Buche - Leaf Identification
+            {
+                question: "Wie sehen die Blätter dieses Baums aus?",
+                image: "img/buche_600_435.jpg",
+                answers: ["Gelappt", "Glatt und oval mit gewelltem Rand", "Gezahnt", "Nadel-förmig"],
+                correct: 1,
+                description: "Die Blätter sind glatt und oval mit gewelltem Rand"
+            },
+            // Tanne - Tree Identification
+            {
+                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen?",
+                image: "img/tanne_600_435.jpg",
+                answers: ["Tanne", "Fichte", "Kiefer", "Buche"],
+                correct: 0,
+                description: "Ein Nadelbaum mit aufrecht stehenden Zapfen"
+            },
+            // Tanne - Fruit Identification
+            {
+                question: "Wie stehen die Zapfen dieses Baums auf den Ästen?",
+                image: "img/tanne_600_435.jpg",
+                answers: ["Sie hängen nach unten", "Sie stehen aufrecht wie Kerzen", "Zu zweit wachsend", "In Büscheln"],
+                correct: 1,
+                description: "Die Zapfen stehen aufrecht wie Kerzen auf den Ästen"
+            },
+            // Tanne - Needle Identification
+            {
+                question: "Wie sind die Nadeln dieses Baums?",
+                image: "img/tanne_600_435.jpg",
+                answers: ["Spitz und stachelig", "Weich und flach, stechen nicht", "Paarweise wachsend", "Sehr lang"],
+                correct: 1,
+                description: "Die Nadeln sind weich und flach, sie stechen nicht"
+            },
+            // Fichte - Tree Identification
+            {
+                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen?",
+                image: "img/fichte_600_435.jpg",
+                answers: ["Tanne", "Fichte", "Kiefer", "Eiche"],
+                correct: 1,
+                description: "Ein Nadelbaum mit spitzen Nadeln"
+            },
+            // Fichte - Fruit Identification
+            {
+                question: "Wie hängen die Zapfen dieses Baums?",
+                image: "img/fichte_600_435.jpg",
+                answers: ["Aufrecht", "Hängen nach unten", "Wachsen paarweise", "Stehen senkrecht"],
+                correct: 1,
+                description: "Die Zapfen hängen nach unten"
+            },
+            // Fichte - Needle Identification
+            {
+                question: "Wie sind die Nadeln dieses Baums?",
+                image: "img/fichte_600_435.jpg",
+                answers: ["Weich und flach", "Spitz und stachelig", "Paarweise wachsend", "Sehr kurz"],
+                correct: 1,
+                description: "Die Nadeln sind spitz und können stechen"
+            },
+            // Kiefer - Tree Identification
+            {
+                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen?",
+                image: "img/kiefer_600_435.jpg",
+                answers: ["Fichte", "Kiefer", "Tanne", "Buche"],
+                correct: 1,
+                description: "Ein Nadelbaum mit langen Nadeln"
+            },
+            // Kiefer - Fruit Identification
+            {
+                question: "Wie wachsen die Nadeln dieses Baums?",
+                image: "img/kiefer_600_435.jpg",
+                answers: ["Einzeln", "Zu zweit (als Paar)", "In Büscheln", "Rundherum"],
+                correct: 1,
+                description: "Die Nadeln wachsen zu zweit (als Paar)"
+            },
+            // Kiefer - Needle Identification
+            {
+                question: "Welche Besonderheit haben die Nadeln dieses Baums?",
+                image: "img/kiefer_600_435.jpg",
+                answers: ["Sie sind sehr lang", "Sie sind stachelig", "Sie sind sehr kurz", "Sie sind weich"],
+                correct: 0,
+                description: "Die Nadeln sind sehr lang"
+            },
+            // Buche - Additional tree identification
+            {
+                question: "Welcher Laubbaum ist hier zu sehen?",
+                image: "img/buche_600_435.jpg",
+                answers: ["Eiche", "Buche", "Ahorn", "Birke"],
+                correct: 1,
+                description: "Ein Laubbaum mit glatter Rinde"
+            },
+            // Tanne - Additional tree identification  
+            {
+                question: "Welcher Nadelbaum ist auf dem Bild?",
+                image: "img/tanne_600_435.jpg",
+                answers: ["Tanne", "Fichte", "Lärche", "Kiefer"],
+                correct: 0,
+                description: "Ein Nadelbaum, der sich durch seine Zapfen auszeichnet"
+            },
+            // Fichte - Additional identification
+            {
+                question: "Um welchen Nadelbaum handelt es sich?",
+                image: "img/fichte_600_435.jpg",
+                answers: ["Kiefer", "Fichte", "Tanne", "Lärche"],
+                correct: 1,
+                description: "Ein Nadelbaum mit spitzen Nadeln"
             }
         ];
 
         let currentQuestion = 0;
         let score = 0;
         let answerSelected = false;
+        let answerHistory = [];
 
         function showQuestion() {
             const questionData = questions[currentQuestion];
             document.getElementById('question').textContent = questionData.question;
+            
+            const imageContainer = document.getElementById('question-image-container');
+            if (questionData.image) {
+                const img = document.createElement('img');
+                img.src = questionData.image;
+                img.alt = questionData.description || 'Baum-Bild';
+                img.className = 'question-image';
+                imageContainer.innerHTML = '';
+                imageContainer.appendChild(img);
+            } else {
+                imageContainer.innerHTML = '';
+            }
             
             const answerButtons = document.getElementById('answer-buttons');
             answerButtons.innerHTML = '';
@@ -227,13 +527,26 @@
             const questionData = questions[currentQuestion];
             const buttons = document.querySelectorAll('.answer-btn');
             
+            const isCorrect = selectedIndex === questionData.correct;
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Track answer history
+            answerHistory.push({
+                questionNumber: currentQuestion + 1,
+                question: questionData.question,
+                userAnswer: questionData.answers[selectedIndex],
+                correctAnswer: questionData.answers[questionData.correct],
+                isCorrect: isCorrect
+            });
+            
             buttons.forEach((button, index) => {
                 button.disabled = true;
                 
                 if (index === selectedIndex) {
-                    if (selectedIndex === questionData.correct) {
+                    if (isCorrect) {
                         button.classList.add('correct');
-                        score++;
                     } else {
                         button.classList.add('incorrect');
                     }
@@ -270,12 +583,100 @@
             }
             
             document.getElementById('result-message').textContent = message;
+            
+            // Generate detailed summary
+            generateDetailedSummary();
+        }
+        
+        function generateDetailedSummary() {
+            const summaryContainer = document.getElementById('detailed-summary');
+            let html = '<div class="summary-title">📋 Deine Antworten im Detail</div>';
+            
+            // Generate question-by-question breakdown
+            answerHistory.forEach(item => {
+                const statusClass = item.isCorrect ? 'correct' : 'incorrect';
+                const statusIcon = item.isCorrect ? '✓' : '✗';
+                
+                html += `
+                    <div class="question-item ${statusClass}">
+                        <div class="question-header">
+                            <span class="question-number">Frage ${item.questionNumber}</span>
+                            <span class="status-icon">${statusIcon}</span>
+                        </div>
+                        <div class="question-text">${item.question}</div>
+                        <div class="answer-comparison">
+                            <div class="user-answer">Deine Antwort: ${item.userAnswer}</div>
+                            ${!item.isCorrect ? `<div class="correct-answer">Richtige Antwort: ${item.correctAnswer}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Generate recommendations based on error patterns
+            const recommendations = generateRecommendations();
+            if (recommendations.length > 0) {
+                html += '<div class="recommendations"><h3>💡 Verbesserungsvorschläge</h3><ul>';
+                recommendations.forEach(rec => {
+                    html += `<li>${rec}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            summaryContainer.innerHTML = html;
+        }
+        
+        function generateRecommendations() {
+            const recommendations = [];
+            const wrongAnswers = answerHistory.filter(item => !item.isCorrect);
+            
+            if (wrongAnswers.length === 0) return [];
+            
+            // Check for tree identification errors
+            const treeIdErrors = wrongAnswers.filter(item => 
+                item.question.includes('Baum ist auf') || 
+                item.question.includes('Welcher Baum') || 
+                item.question.includes('Welcher Laubbaum') ||
+                item.question.includes('Welcher Nadelbaum')
+            ).length;
+            
+            if (treeIdErrors > 0) {
+                recommendations.push('Übe die Erkennung der verschiedenen Baumarten. Schau dir die Form der Bäume genau an.');
+            }
+            
+            // Check for fruit identification errors
+            const fruitErrors = wrongAnswers.filter(item => 
+                item.question.includes('Früchte') || 
+                item.question.includes('Frucht') ||
+                item.question.includes('Zapfen')
+            ).length;
+            
+            if (fruitErrors > 0) {
+                recommendations.push('Informiere dich über die Früchte der Bäume - Eicheln, Bucheckern, Zapfen usw.');
+            }
+            
+            // Check for leaf/needle errors
+            const leafErrors = wrongAnswers.filter(item => 
+                item.question.includes('Blätter') || 
+                item.question.includes('Nadeln')
+            ).length;
+            
+            if (leafErrors > 0) {
+                recommendations.push('Achte auf die Blätter und Nadeln - jedes Merkmal hilft dir beim Erkennen des Baums.');
+            }
+            
+            // General encouragement
+            if (wrongAnswers.length >= 5) {
+                recommendations.push('Mache das Quiz ruhig nochmal - Übung macht den Meister!');
+            }
+            
+            return recommendations;
         }
 
         function restartQuiz() {
             currentQuestion = 0;
             score = 0;
             answerSelected = false;
+            answerHistory = [];
             
             document.getElementById('quiz-screen').style.display = 'block';
             document.getElementById('result-screen').classList.remove('active');
