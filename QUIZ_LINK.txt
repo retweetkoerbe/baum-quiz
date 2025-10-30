@@ -1,0 +1,28 @@
+🌳 Your Quiz is Live! 🌳
+
+Share these links with your students:
+
+1. Main Quiz (shorter URL):
+   https://retweetkoerbe.github.io/baum-quiz/
+
+2. Original Quiz:
+   https://retweetkoerbe.github.io/baum-quiz/index_mit_bildern.html
+
+Features:
+✅ 27 questions about trees
+✅ Beautiful images for each tree
+✅ Detailed summary after completion
+✅ Shows which answers were right/wrong
+✅ Personalized learning recommendations
+✅ Each browser session is independent
+
+For Teachers:
+- No login required
+- Works on any device (phone, tablet, computer)
+- Completely private - no data tracking
+- Free forever
+- Students can retake as many times as they want
+
+Enjoy teaching! 🌲
+
+
