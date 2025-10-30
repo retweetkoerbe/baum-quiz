@@ -244,6 +244,38 @@
             left: 0;
         }
 
+        /* Konfetti Overlay */
+        #confetti-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 16px;
+            opacity: 0.9;
+            will-change: transform, opacity;
+            border-radius: 2px;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translate3d(var(--x, 0px), -10vh, 0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate3d(var(--xEnd, 0px), 110vh, 0) rotate(720deg);
+                opacity: 0.9;
+            }
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.8em;
@@ -276,6 +308,8 @@
             <div class="detailed-summary" id="detailed-summary"></div>
             <button class="restart-btn" id="restart-btn">🔄 Nochmal spielen!</button>
         </div>
+
+        <div id="confetti-overlay"></div>
     </div>
 
     <script>
@@ -694,20 +728,21 @@
             document.getElementById('result-screen').classList.add('active');
             
             const percentage = Math.round((score / shuffledQuestions.length) * 100);
-            let message = `Super! Du hast ${score} von ${shuffledQuestions.length} Fragen richtig beantwortet!`;
-            
-            if (percentage === 100) {
-                message = `🎉 Perfekt! Du hast alle ${shuffledQuestions.length} Fragen richtig beantwortet! 🎉`;
-            } else if (percentage >= 80) {
-                message = `Sehr gut! Du hast ${score} von ${shuffledQuestions.length} Fragen richtig! 🏆`;
-            } else if (percentage >= 60) {
-                message = `Gut gemacht! Du hast ${score} von ${shuffledQuestions.length} Fragen richtig! 👍`;
-            }
-            
-            document.getElementById('result-message').textContent = message;
+            const baseMsg = `Du hast ${score} von ${shuffledQuestions.length} Fragen richtig!`;
+            const cheer = percentage === 100
+                ? '🎉 Perfekt! Unglaubliche Leistung!'
+                : percentage >= 80
+                ? '🏆 Mega! Richtig stark!'
+                : percentage >= 60
+                ? '👍 Stark! Das läuft!'
+                : '✨ Weiter so! Super Einsatz!';
+            document.getElementById('result-message').textContent = `${cheer} ${baseMsg}`;
             
             // Generate detailed summary
             generateDetailedSummary();
+
+            // Start confetti celebration
+            launchConfetti(4000);
         }
         
         function generateDetailedSummary() {
@@ -806,10 +841,47 @@
             document.getElementById('quiz-screen').style.display = 'block';
             document.getElementById('result-screen').classList.remove('active');
             
+            clearConfetti();
             showQuestion();
         }
 
         document.getElementById('restart-btn').addEventListener('click', restartQuiz);
+
+        // Konfetti Logik
+        function launchConfetti(duration = 4000) {
+            const overlay = document.getElementById('confetti-overlay');
+            if (!overlay) return;
+
+            const colors = ['#ff4757', '#ffa502', '#2ed573', '#1e90ff', '#e84393', '#ffd32a'];
+            const particles = 180;
+            const startTime = Date.now();
+
+            for (let i = 0; i < particles; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.backgroundColor = color;
+                const left = Math.random() * 100; // vw
+                const xDrift = (Math.random() * 40 - 20) + 'vw';
+                piece.style.left = left + 'vw';
+                piece.style.setProperty('--x', (Math.random() * 20 - 10) + 'px');
+                piece.style.setProperty('--xEnd', xDrift);
+                piece.style.animation = `confetti-fall ${3 + Math.random() * 2}s linear ${Math.random()}s forwards`;
+                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                overlay.appendChild(piece);
+            }
+
+            // Cleanup after duration
+            setTimeout(() => {
+                clearConfetti();
+            }, duration);
+        }
+
+        function clearConfetti() {
+            const overlay = document.getElementById('confetti-overlay');
+            if (!overlay) return;
+            overlay.innerHTML = '';
+        }
 
         showQuestion();
     </script>
