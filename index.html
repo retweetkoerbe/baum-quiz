@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baum-Quiz für Grundschüler</title>
+    <title>Wintertiere-Quiz für Grundschüler</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            background: linear-gradient(135deg, #b3d9ff 0%, #e6f3ff 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -32,7 +32,7 @@
         }
 
         h1 {
-            color: #2d8659;
+            color: #1e3a8a;
             font-size: 2.5em;
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -118,10 +118,10 @@
 
         .result-message {
             font-size: 1.8em;
-            color: #2d8659;
+            color: #1e3a8a;
             margin-bottom: 20px;
             padding: 20px;
-            background: #e8f5e9;
+            background: #dbeafe;
             border-radius: 15px;
         }
 
@@ -152,7 +152,7 @@
 
         .summary-title {
             font-size: 1.3em;
-            color: #2d8659;
+            color: #1e3a8a;
             margin-bottom: 15px;
             font-weight: bold;
         }
@@ -294,7 +294,7 @@
 </head>
 <body>
     <div class="quiz-container">
-        <h1>🌳 Baum-Quiz 🌳</h1>
+        <h1>❄️ Wintertiere-Quiz ❄️</h1>
         
         <div id="quiz-screen">
             <div class="question" id="question"></div>
@@ -315,314 +315,66 @@
     <script>
         const questions = [
             {
-                question: "Ich habe Eicheln mit einem kleinen Hütchen. Welcher Baum bin ich?",
+                question: "Zeige hier das Bild vom Eichhörnchen. Zeige auf den langen, buschigen Schwanz. Wie heißt dieser Körperteil des Eichhörnchens?",
+                image: "img/eichhörnchen.png",
+                answers: ["Die Schnauze", "Der Rumpf", "Der Schwanz", "Die Vorderpfote"],
+                correct: 2,
+                description: "Eichhörnchen mit langem, buschigem Schwanz"
+            },
+            {
+                question: "Zeige hier das Bild mit dem Bett und den drei Tieren. Ein Tier hat sich im \"Winterschlaf-Bett\" verirrt. Welches Tier passt hier nicht hinein?",
+                image: "img/winterschlaf.png",
+                answers: ["Das Eichhörnchen (oder Hamster)", "Die Fledermaus", "Der Fisch", "Alle dürfen im Bett schlafen"],
+                correct: 2,
+                description: "Bett mit drei Tieren - eines passt nicht hinein"
+            },
+            {
+                question: "Das Eichhörnchen schläft im Winter viel, wacht aber auf, um zu fressen. Wie nennt man das?",
                 image: null,
-                answers: ["Buche", "Eiche", "Tanne", "Kiefer"],
+                answers: ["Winterschlaf", "Winterruhe", "Winterstarre", "Sommerschlaf"],
                 correct: 1
             },
             {
-                question: "Welcher Baum ist auf diesem Bild zu sehen?",
-                image: "img/eiche_600_435.jpg",
-                answers: ["Buche", "Eiche", "Tanne", "Kiefer"],
-                correct: 1,
-                description: "Ein Baum mit gelappten Blättern und Eicheln mit Hütchen"
-            },
-            {
-                question: "Meine Zapfen stehen aufrecht wie Kerzen auf dem Ast. Welcher Baum bin ich?",
+                question: "Wo wohnt das Eichhörnchen? Wie nennt man sein Nest?",
                 image: null,
-                answers: ["Fichte", "Kiefer", "Tanne", "Buche"],
-                correct: 2
-            },
-            {
-                question: "Meine Nadeln sind weich und stechen nicht. Welcher Baum bin ich?",
-                image: null,
-                answers: ["Tanne", "Fichte", "Kiefer", "Eiche"],
+                answers: ["Kobel", "Horst", "Höhle", "Hütte"],
                 correct: 0
             },
             {
-                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen? (Seine Nadeln wachsen paarweise)",
-                image: "img/kiefer_600_435.jpg",
-                answers: ["Fichte", "Kiefer", "Tanne", "Buche"],
-                correct: 1,
-                description: "Ein Nadelbaum mit langen Nadeln, die zu zweit wachsen"
-            },
-            {
-                question: "Meine Nadeln wachsen immer zu zweit (als Paar) aus dem Ast. Welcher Baum bin ich?",
+                question: "Der Storch findet im Winter hier kein Futter. Was ist seine Strategie?",
                 image: null,
-                answers: ["Buche", "Fichte", "Kiefer", "Tanne"],
+                answers: ["Er gräbt sich im Schlamm ein.", "Er frisst Nüsse.", "Er ist ein Winterflüchter und fliegt nach Afrika.", "Er bekommt ein dickes Fell."],
                 correct: 2
             },
             {
-                question: "Welcher Baum ist hier abgebildet? (Seine Zapfen hängen nach unten)",
-                image: "img/fichte_600_435.jpg",
-                answers: ["Tanne", "Fichte", "Kiefer", "Eiche"],
-                correct: 1,
-                description: "Ein Nadelbaum mit spitzen Nadeln und nach unten hängenden Zapfen"
-            },
-            {
-                question: "Du erkennst mich an meiner glatten, silbergrauen Rinde. Welcher Baum bin ich?",
+                question: "Der Igel frisst sich im Herbst eine dicke Speckschicht an. Was macht er im Winter?",
                 image: null,
-                answers: ["Eiche", "Kiefer", "Fichte", "Buche"],
-                correct: 3
-            },
-            {
-                question: "Welcher Baum ist auf diesem Bild zu sehen? (Glatte Rinde und Bucheckern)",
-                image: "img/buche_600_435.jpg",
-                answers: ["Eiche", "Buche", "Fichte", "Kiefer"],
-                correct: 1,
-                description: "Ein Baum mit glatter Rinde und stacheligen Früchten"
-            },
-            // Eiche - Tree Identification
-            {
-                question: "Welcher Baum ist auf diesem Bild zu sehen?",
-                image: "img/eiche_600_435.jpg",
-                answers: ["Eiche", "Buche", "Fichte", "Tanne"],
-                correct: 0,
-                description: "Ein Baum mit gelappten Blättern"
-            },
-            // Eiche - Fruit Identification
-            {
-                question: "Was für Früchte trägt dieser Baum? (Hinweis: Sie haben ein kleines Hütchen)",
-                image: "img/eiche_600_435.jpg",
-                answers: ["Bucheckern", "Eicheln", "Zapfen", "Beeren"],
-                correct: 1,
-                description: "Dieser Baum trägt Eicheln mit Hütchen"
-            },
-            // Eiche - Leaf Identification
-            {
-                question: "Wie sehen die Blätter dieses Baums aus?",
-                image: "img/eiche_600_435.jpg",
-                answers: ["Glatt und oval", "Gelappt (mit Einbuchtungen)", "Nadel-förmig", "Gezahnt"],
-                correct: 1,
-                description: "Die Blätter sind gelappt mit Einbuchtungen"
-            },
-            // Buche - Tree Identification
-            {
-                question: "Welcher Baum ist auf diesem Bild zu sehen?",
-                image: "img/buche_600_435.jpg",
-                answers: ["Eiche", "Buche", "Kiefer", "Fichte"],
-                correct: 1,
-                description: "Ein Baum mit glatter silber-grauer Rinde"
-            },
-            // Buche - Fruit Identification
-            {
-                question: "Was für Früchte trägt dieser Baum?",
-                image: "img/buche_600_435.jpg",
-                answers: ["Eicheln", "Bucheckern (stachelige Hülle)", "Zapfen", "Beeren"],
-                correct: 1,
-                description: "Dieser Baum trägt Bucheckern in stacheligen Hüllen"
-            },
-            // Buche - Leaf Identification
-            {
-                question: "Wie sehen die Blätter dieses Baums aus?",
-                image: "img/buche_600_435.jpg",
-                answers: ["Gelappt", "Glatt und oval mit gewelltem Rand", "Gezahnt", "Nadel-förmig"],
-                correct: 1,
-                description: "Die Blätter sind glatt und oval mit gewelltem Rand"
-            },
-            // Tanne - Tree Identification
-            {
-                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen?",
-                image: "img/tanne_600_435.jpg",
-                answers: ["Tanne", "Fichte", "Kiefer", "Buche"],
-                correct: 0,
-                description: "Ein Nadelbaum mit aufrecht stehenden Zapfen"
-            },
-            // Tanne - Fruit Identification
-            {
-                question: "Wie stehen die Zapfen dieses Baums auf den Ästen?",
-                image: "img/tanne_600_435.jpg",
-                answers: ["Sie hängen nach unten", "Sie stehen aufrecht wie Kerzen", "Zu zweit wachsend", "In Büscheln"],
-                correct: 1,
-                description: "Die Zapfen stehen aufrecht wie Kerzen auf den Ästen"
-            },
-            // Tanne - Needle Identification
-            {
-                question: "Wie sind die Nadeln dieses Baums?",
-                image: "img/tanne_600_435.jpg",
-                answers: ["Spitz und stachelig", "Weich und flach, stechen nicht", "Paarweise wachsend", "Sehr lang"],
-                correct: 1,
-                description: "Die Nadeln sind weich und flach, sie stechen nicht"
-            },
-            // Fichte - Tree Identification
-            {
-                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen?",
-                image: "img/fichte_600_435.jpg",
-                answers: ["Tanne", "Fichte", "Kiefer", "Eiche"],
-                correct: 1,
-                description: "Ein Nadelbaum mit spitzen Nadeln"
-            },
-            // Fichte - Fruit Identification
-            {
-                question: "Wie hängen die Zapfen dieses Baums?",
-                image: "img/fichte_600_435.jpg",
-                answers: ["Aufrecht", "Hängen nach unten", "Wachsen paarweise", "Stehen senkrecht"],
-                correct: 1,
-                description: "Die Zapfen hängen nach unten"
-            },
-            // Fichte - Needle Identification
-            {
-                question: "Wie sind die Nadeln dieses Baums?",
-                image: "img/fichte_600_435.jpg",
-                answers: ["Weich und flach", "Spitz und stachelig", "Paarweise wachsend", "Sehr kurz"],
-                correct: 1,
-                description: "Die Nadeln sind spitz und können stechen"
-            },
-            // Kiefer - Tree Identification
-            {
-                question: "Welcher Nadelbaum ist auf diesem Bild zu sehen?",
-                image: "img/kiefer_600_435.jpg",
-                answers: ["Fichte", "Kiefer", "Tanne", "Buche"],
-                correct: 1,
-                description: "Ein Nadelbaum mit langen Nadeln"
-            },
-            // Kiefer - Fruit Identification
-            {
-                question: "Wie wachsen die Nadeln dieses Baums?",
-                image: "img/kiefer_600_435.jpg",
-                answers: ["Einzeln", "Zu zweit (als Paar)", "In Büscheln", "Rundherum"],
-                correct: 1,
-                description: "Die Nadeln wachsen zu zweit (als Paar)"
-            },
-            // Kiefer - Needle Identification
-            {
-                question: "Welche Besonderheit haben die Nadeln dieses Baums?",
-                image: "img/kiefer_600_435.jpg",
-                answers: ["Sie sind sehr lang", "Sie sind stachelig", "Sie sind sehr kurz", "Sie sind weich"],
-                correct: 0,
-                description: "Die Nadeln sind sehr lang"
-            },
-            // Buche - Additional tree identification
-            {
-                question: "Welcher Laubbaum ist hier zu sehen?",
-                image: "img/buche_600_435.jpg",
-                answers: ["Eiche", "Buche", "Ahorn", "Birke"],
-                correct: 1,
-                description: "Ein Laubbaum mit glatter Rinde"
-            },
-            // Tanne - Additional tree identification  
-            {
-                question: "Welcher Nadelbaum ist auf dem Bild?",
-                image: "img/tanne_600_435.jpg",
-                answers: ["Tanne", "Fichte", "Lärche", "Kiefer"],
-                correct: 0,
-                description: "Ein Nadelbaum, der sich durch seine Zapfen auszeichnet"
-            },
-            // Fichte - Additional identification
-            {
-                question: "Um welchen Nadelbaum handelt es sich?",
-                image: "img/fichte_600_435.jpg",
-                answers: ["Kiefer", "Fichte", "Tanne", "Lärche"],
-                correct: 1,
-                description: "Ein Nadelbaum mit spitzen Nadeln"
-            }
-            ,
-            // Neue Textfragen
-            {
-                question: "Welcher Nadelbaum ist eine Ausnahme und verliert seine Nadeln im Herbst?",
-                image: null,
-                answers: ["Die Fichte", "Die Tanne", "Die Lärche", "Die Kiefer"],
-                correct: 2
-            },
-            {
-                question: "Welcher Merkspruch hilft dir, Fichte und Tanne zu unterscheiden?",
-                image: null,
-                answers: [
-                    "Die Tanne sticht, die Fichte nicht!",
-                    "Die Fichte sticht, die Tanne nicht!",
-                    "Die Kiefer sticht, die Lärche nicht!",
-                    "Alle Bäume stechen!"
-                ],
+                answers: ["Er fliegt in den Süden.", "Er hält Winterschlaf in einem Laubhaufen.", "Er sammelt Pilze.", "Er wird steif und friert ein."],
                 correct: 1
             },
             {
-                question: "Bei welchem Baum stehen die Zapfen aufrecht auf dem Ast, wie kleine Kerzen?",
+                question: "Was passiert mit dem Frosch, wenn es kalt wird?",
                 image: null,
-                answers: ["Bei der Fichte", "Bei der Tanne", "Bei der Kiefer", "Bei der Lärche"],
-                correct: 1
-            },
-            {
-                question: "Welcher Baum hat lange Nadeln, die immer zu zweit (paarweise) wachsen?",
-                image: null,
-                answers: ["Die Lärche", "Die Fichte", "Die Tanne", "Die Kiefer"],
-                correct: 3
-            },
-            {
-                question: "Die Rinde der Tanne ist...",
-                image: null,
-                answers: ["... glatt.", "... schuppig.", "... stark rissig und rotbraun.", "... graubraun und schuppig."],
+                answers: ["Er fällt in eine Kältestarre (Winterstarre).", "Er baut sich ein Nest auf einem Baum.", "Er wandert in warme Länder.", "Er wärmt sich am Lagerfeuer."],
                 correct: 0
             },
             {
-                question: "Welcher Baum kann laut den Steckbriefen am ältesten werden (bis zu 600 Jahre)?",
+                question: "Wie sehen junge Eichhörnchen direkt nach der Geburt aus?",
                 image: null,
-                answers: ["Die Kiefer und die Fichte", "Die Tanne und die Lärche", "Nur die Kiefer", "Nur die Fichte"],
+                answers: ["Sie haben schon lange Zähne.", "Sie können sofort klettern.", "Sie sind nackt, taub und blind.", "Sie sehen aus wie kleine Frösche."],
+                correct: 2
+            },
+            {
+                question: "Wer sind die Feinde des Eichhörnchens?",
+                image: null,
+                answers: ["Löwe und Tiger", "Marder, Katze und Eule", "Hund und Huhn", "Nur der Mensch"],
                 correct: 1
             },
             {
-                question: "Wie wachsen die Nadeln bei der Lärche?",
+                question: "Welches Futter sammelt das Eichhörnchen für den Winter?",
                 image: null,
-                answers: ["Einzeln und stechend", "Immer zu zweit", "In kleinen Büscheln", "Sie hat Blätter, keine Nadeln"],
-                correct: 2
-            },
-            // Neue Bild-Erkennungsfragen
-            {
-                question: "Welcher Baum ist auf diesem Bild zu sehen?",
-                image: "img/linde_600_435.jpg",
-                answers: ["Linde", "Eiche", "Buche", "Ahorn"],
-                correct: 0,
-                description: "Linde mit herzförmigen Blättern"
-            },
-            {
-                question: "Welcher Baum ist auf diesem Bild zu sehen?",
-                image: "img/bergahorn_600_435.jpg",
-                answers: ["Ahorn (Bergahorn)", "Eiche", "Buche", "Linde"],
-                correct: 0,
-                description: "Bergahorn mit typischen gelappten Ahornblättern"
-            },
-            {
-                question: "Welcher Baum ist auf diesem Bild zu sehen?",
-                image: "img/eiche_600_435-2.jpg",
-                answers: ["Eiche", "Buche", "Ahorn", "Linde"],
-                correct: 0,
-                description: "Eiche mit gelappten Blättern (zweites Bild)"
-            },
-            // Weitere neue Textfragen
-            {
-                question: "Welcher Baum wird laut den Steckbriefen nicht ganz so hoch wie die anderen (nur bis 45m)?",
-                image: null,
-                answers: ["Die Tanne", "Die Lärche", "Die Kiefer", "Die Fichte"],
-                correct: 3
-            },
-            {
-                question: "Welcher Baum hat als einziger eine \"glatte\" Rinde?",
-                image: null,
-                answers: ["Die Tanne", "Die Fichte", "Die Kiefer", "Die Lärche"],
+                answers: ["Nüsse, Pilze und Samen", "Wurst und Käse", "Gras und Heu", "Fische und Fliegen"],
                 correct: 0
-            },
-            {
-                question: "Wie werden die Rinden der Lärche und Fichte beschrieben?",
-                image: null,
-                answers: ["Beide als \"glatt\"", "Beide als \"schuppig\"", "Lärche \"glatt\", Fichte \"schuppig\"", "Lärche \"rissig\", Fichte \"glatt\""],
-                correct: 1
-            },
-            {
-                question: "Welche Beschreibung passt zur Rinde der Kiefer?",
-                image: null,
-                answers: ["Glatt und silbergrau", "Nur graubraun", "Rotbraun, stark rissig und schuppig", "Nur glatt"],
-                correct: 2
-            },
-            {
-                question: "Wie hoch und alt kann die Fichte werden?",
-                image: null,
-                answers: ["bis 50m / bis 600 Jahre", "bis 45m / bis 300 Jahre", "bis 50m / bis 200 Jahre", "bis 45m / bis 600 Jahre"],
-                correct: 1
-            },
-            {
-                question: "Welche beiden Bäume können bis zu 600 Jahre alt werden?",
-                image: null,
-                answers: ["Fichte und Kiefer", "Tanne und Kiefer", "Tanne und Lärche", "Fichte und Lärche"],
-                correct: 2
             }
         ];
 
@@ -653,7 +405,7 @@
             if (questionData.image) {
                 const img = document.createElement('img');
                 img.src = questionData.image;
-                img.alt = questionData.description || 'Baum-Bild';
+                img.alt = questionData.description || 'Tier-Bild';
                 img.className = 'question-image';
                 imageContainer.innerHTML = '';
                 imageContainer.appendChild(img);
@@ -788,37 +540,39 @@
             
             if (wrongAnswers.length === 0) return [];
             
-            // Check for tree identification errors
-            const treeIdErrors = wrongAnswers.filter(item => 
-                item.question.includes('Baum ist auf') || 
-                item.question.includes('Welcher Baum') || 
-                item.question.includes('Welcher Laubbaum') ||
-                item.question.includes('Welcher Nadelbaum')
+            // Check for animal identification errors
+            const animalIdErrors = wrongAnswers.filter(item => 
+                item.question.includes('Tier') || 
+                item.question.includes('Eichhörnchen') ||
+                item.question.includes('Bild')
             ).length;
             
-            if (treeIdErrors > 0) {
-                recommendations.push('Übe die Erkennung der verschiedenen Baumarten. Schau dir die Form der Bäume genau an.');
+            if (animalIdErrors > 0) {
+                recommendations.push('Übe die Erkennung der verschiedenen Wintertiere. Schau dir die Bilder genau an.');
             }
             
-            // Check for fruit identification errors
-            const fruitErrors = wrongAnswers.filter(item => 
-                item.question.includes('Früchte') || 
-                item.question.includes('Frucht') ||
-                item.question.includes('Zapfen')
+            // Check for winter behavior errors
+            const behaviorErrors = wrongAnswers.filter(item => 
+                item.question.includes('Winterschlaf') || 
+                item.question.includes('Winterruhe') ||
+                item.question.includes('Winterstarre') ||
+                item.question.includes('Winterflüchter')
             ).length;
             
-            if (fruitErrors > 0) {
-                recommendations.push('Informiere dich über die Früchte der Bäume - Eicheln, Bucheckern, Zapfen usw.');
+            if (behaviorErrors > 0) {
+                recommendations.push('Informiere dich über die verschiedenen Winterstrategien der Tiere - Winterschlaf, Winterruhe, Winterstarre und Winterflucht.');
             }
             
-            // Check for leaf/needle errors
-            const leafErrors = wrongAnswers.filter(item => 
-                item.question.includes('Blätter') || 
-                item.question.includes('Nadeln')
+            // Check for habitat/food errors
+            const habitatErrors = wrongAnswers.filter(item => 
+                item.question.includes('Nest') || 
+                item.question.includes('Kobel') ||
+                item.question.includes('Futter') ||
+                item.question.includes('sammelt')
             ).length;
             
-            if (leafErrors > 0) {
-                recommendations.push('Achte auf die Blätter und Nadeln - jedes Merkmal hilft dir beim Erkennen des Baums.');
+            if (habitatErrors > 0) {
+                recommendations.push('Lerne mehr über die Lebensweise der Wintertiere - wo sie wohnen und was sie fressen.');
             }
             
             // General encouragement
